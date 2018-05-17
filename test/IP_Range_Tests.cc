@@ -135,10 +135,15 @@ TEST(Interval_Is_On_Or_Adjacent, test_far_above_interval) {
    EXPECT_FALSE( is_on_or_adjacent( 0xffffffff, 0, 0xfffffffd ) );
 }
 
-TEST(IP_Range, test_to_dotted_octet) {
-   EXPECT_EQ( "0.0.0.0", IP_Range(0x00000000, 0xffffffff).to_dotted_octet() );
-   EXPECT_EQ( "0.0.0.0-255.255.255.255", IP_Range(0x00000000, 0x00000000).to_dotted_octet() );
-   EXPECT_EQ( "192.168.1.0-192.168.1.255", IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0)).to_dotted_octet() );
+TEST(IP_Range, test_to_string) {
+   EXPECT_EQ( "0.0.0.0", IP_Range(0x00000000, 0xffffffff).to_string() );
+   EXPECT_EQ( "0.0.0.0-255.255.255.255", IP_Range(0x00000000, 0x00000000).to_string() );
+   EXPECT_EQ( "192.168.1.0-192.168.1.255", IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0)).to_string() );
+}
+
+TEST(IP_Range, test_to_string_with_discontiguous_subnet_mask) {
+   EXPECT_EQ( "0.0.0.0/255.255.0.255", IP_Range(0x00000000, 0xffff00ff).to_string() );
+   EXPECT_EQ( "192.168.1.0/255.128.255.0", IP_Range( from_octets(192,168,1,0), from_octets(255,128,255,0)).to_string() );
 }
 
 TEST(IP_Range, test_is_coalescable_with_same_valued_range) {
@@ -390,7 +395,7 @@ TEST(Coalescing_IP_Range_Set, test_add_two_presorted_uncoalescable_ranges_then_a
 
    EXPECT_EQ( 1, set.size() );
 
-   EXPECT_EQ( "192.168.0.0-192.168.2.255", set.begin()->to_dotted_octet() );
+   EXPECT_EQ( "192.168.0.0-192.168.2.255", set.begin()->to_string() );
 }
 
 TEST(Coalescing_IP_Range_Set, test_add_three_presorted_uncoalescable_ranges_then_add_one_missing_range ) {

@@ -48,7 +48,24 @@ uint32_t IP_Range::get_end_address() const
 }
 
 
-std::string IP_Range::to_dotted_octet() const
+std::string IP_Range::to_string() const
+{
+   std::string str;
+
+   if( !m_noncontiguous_subnet_mask )
+   {
+      str = to_start_dash_end();
+   }
+   else
+   {
+      str = to_start_slash_subnet_mask();
+   }
+
+   return str;
+}
+
+
+std::string IP_Range::to_start_dash_end() const
 {
    std::string str;
 
@@ -66,6 +83,19 @@ std::string IP_Range::to_dotted_octet() const
    }
 
    return str;
+}
+
+
+std::string IP_Range::to_start_slash_subnet_mask() const
+{
+   if( !m_noncontiguous_subnet_mask ) throw std::logic_error("Subnet mask not available");
+
+   std::ostringstream strm;
+
+   strm << ::to_dotted_octet( m_start_address ) << "/"
+        << ::to_dotted_octet( m_noncontiguous_subnet_mask );
+
+   return strm.str();
 }
 
 
@@ -155,6 +185,6 @@ std::istream & operator >> ( std::istream & istrm, IP_Range & range )
 
 std::ostream & operator << ( std::ostream & ostrm, const IP_Range & range )
 {
-   ostrm << range.to_dotted_octet();
+   ostrm << range.to_string();
    return ostrm;
 }

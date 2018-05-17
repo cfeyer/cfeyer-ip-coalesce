@@ -15,7 +15,7 @@ class IP_Range
       uint32_t get_start_address() const;
       uint32_t get_end_address() const;
 
-      std::string to_dotted_octet() const;
+      std::string to_string() const;
 
       bool is_coalescable( const IP_Range & other ) const;
 
@@ -33,6 +33,9 @@ class IP_Range
 
       static constexpr uint32_t contiguous_subnet_mask = 0;
       uint32_t m_noncontiguous_subnet_mask;
+
+      std::string to_start_dash_end() const;
+      std::string to_start_slash_subnet_mask() const;
 };
 
 std::istream & operator >> ( std::istream & strm, IP_Range & range );
