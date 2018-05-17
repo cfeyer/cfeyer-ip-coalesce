@@ -287,24 +287,6 @@ TEST(IP_Range, test_stream_input_from_empty_stream) {
    }
 }
 
-TEST(IP_Range, test_stream_output) {
-   {
-      std::ostringstream strm;
-      strm << IP_Range(0x00000000, 0xffffffff);
-      EXPECT_EQ( "0.0.0.0", strm.str() );
-   }
-   {
-      std::ostringstream strm;
-      strm << IP_Range(0x00000000, 0x00000000);
-      EXPECT_EQ( "0.0.0.0-255.255.255.255", strm.str() );
-   }
-   {
-      std::ostringstream strm;
-      strm << IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0) );
-      EXPECT_EQ( "192.168.1.0-192.168.1.255", strm.str() );
-   }
-}
-
 TEST(IP_Range, test_stream_input_three_space_delimited_ranges) {
    std::istringstream strm( "0.0.0.0/0.0.0.0 255.255.255.255/255.255.255.255 192.168.1.2/255.255.255.0" );
 
@@ -324,6 +306,24 @@ TEST(IP_Range, test_stream_input_three_space_delimited_ranges) {
       IP_Range range;
       strm >> range;
       EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
+   }
+}
+
+TEST(IP_Range, test_stream_output) {
+   {
+      std::ostringstream strm;
+      strm << IP_Range(0x00000000, 0xffffffff);
+      EXPECT_EQ( "0.0.0.0", strm.str() );
+   }
+   {
+      std::ostringstream strm;
+      strm << IP_Range(0x00000000, 0x00000000);
+      EXPECT_EQ( "0.0.0.0-255.255.255.255", strm.str() );
+   }
+   {
+      std::ostringstream strm;
+      strm << IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0) );
+      EXPECT_EQ( "192.168.1.0-192.168.1.255", strm.str() );
    }
 }
 
