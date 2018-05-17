@@ -33,5 +33,6 @@ class IP_Range
 };
 
 std::istream & operator >> ( std::istream & strm, IP_Range & range );
+std::ostream & operator << ( std::ostream & strm, const IP_Range & range );
 
 #endif /* IP_RANGE_H */

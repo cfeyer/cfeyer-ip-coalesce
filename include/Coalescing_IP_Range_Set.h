@@ -15,8 +15,8 @@ class Coalescing_IP_Range_Set
 
       int size() const;
 
-      IP_Range_Set::const_iterator cbegin() const;
-      IP_Range_Set::const_iterator cend() const;
+      IP_Range_Set::const_iterator begin() const;
+      IP_Range_Set::const_iterator end() const;
 
    private:
 

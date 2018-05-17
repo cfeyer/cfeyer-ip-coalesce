@@ -36,13 +36,13 @@ void Coalescing_IP_Range_Set::insert( const IP_Range & range )
 }
 
 
-IP_Range_Set::const_iterator Coalescing_IP_Range_Set::cbegin() const
+IP_Range_Set::const_iterator Coalescing_IP_Range_Set::begin() const
 {
    return m_ranges.cbegin();
 }
 
 
-IP_Range_Set::const_iterator Coalescing_IP_Range_Set::cend() const
+IP_Range_Set::const_iterator Coalescing_IP_Range_Set::end() const
 {
    return m_ranges.cend();
 }
