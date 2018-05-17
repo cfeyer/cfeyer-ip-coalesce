@@ -78,6 +78,19 @@ bool IP_Range::operator == ( const IP_Range & other ) const
 }
 
 
+bool IP_Range::operator < ( const IP_Range & rhs ) const
+{
+   if( m_start_address != rhs.m_start_address )
+   {
+      return (m_start_address < rhs.m_start_address);
+   }
+   else
+   {
+      return (m_end_address < rhs.m_end_address );
+   }
+}
+
+
 IP_Range operator + ( const IP_Range & a, const IP_Range & b ) {
 
    if( !a.is_coalescable(b) ) throw std::runtime_error("Ranges not coalescable");
@@ -88,6 +101,13 @@ IP_Range operator + ( const IP_Range & a, const IP_Range & b ) {
    result.m_end_address = std::max( a.m_end_address, b.m_end_address );
 
    return result;
+}
+
+
+IP_Range & IP_Range::operator += ( const IP_Range & other )
+{
+   *this = *this + other;
+   return *this;
 }
 
 

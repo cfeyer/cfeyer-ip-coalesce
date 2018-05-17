@@ -20,6 +20,9 @@ class IP_Range
       bool is_coalescable( const IP_Range & other ) const;
 
       bool operator == ( const IP_Range & other ) const;
+      bool operator < ( const IP_Range & rhs ) const;
+
+      IP_Range & operator += ( const IP_Range & other );
 
    private:
 
