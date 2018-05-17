@@ -1,4 +1,4 @@
 *.o
 *.so
 *.a
-bin/*
+bin/ip-coalesce
