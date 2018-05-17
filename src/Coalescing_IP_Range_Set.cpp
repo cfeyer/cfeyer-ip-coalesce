@@ -4,11 +4,18 @@ void Coalescing_IP_Range_Set::add( const IP_Range & range )
 {
    bool incorporated_via_coalescing = false;
 
-   for( IP_Range & existing_range : m_ranges )
+   for( auto iter = m_ranges.begin();
+        iter != m_ranges.end();
+        iter++ )
    {
+      const IP_Range & existing_range = *iter;
+
       if( existing_range.is_coalescable( range ) )
       {
-         existing_range += range;
+         IP_Range coalesced_range = existing_range + range;
+         m_ranges.erase( iter );
+         m_ranges.insert( coalesced_range );
+
          incorporated_via_coalescing = true;
 
          Coalescing_IP_Range_Set recoalesced_set;
@@ -24,14 +31,22 @@ void Coalescing_IP_Range_Set::add( const IP_Range & range )
 
    if( !incorporated_via_coalescing )
    {
-      m_ranges.push_back( range );
+      m_ranges.insert( range );
    }
 }
 
-IP_Range Coalescing_IP_Range_Set::at( int index ) const
+
+IP_Range_Set::const_iterator Coalescing_IP_Range_Set::cbegin() const
 {
-   return m_ranges.at( index );
+   return m_ranges.cbegin();
 }
+
+
+IP_Range_Set::const_iterator Coalescing_IP_Range_Set::cend() const
+{
+   return m_ranges.cend();
+}
+
 
 int Coalescing_IP_Range_Set::size() const
 {

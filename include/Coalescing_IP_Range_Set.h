@@ -1,9 +1,11 @@
 #ifndef COALESCING_IP_RANGE_SET_H
 #define COALESCING_IP_RANGE_SET_H
 
-#include <vector>
+#include <set>
 
 #include "IP_Range.h"
+
+using IP_Range_Set = std::set<IP_Range>;
 
 class Coalescing_IP_Range_Set
 {
@@ -13,11 +15,12 @@ class Coalescing_IP_Range_Set
 
       int size() const;
 
-      IP_Range at( int index ) const;
+      IP_Range_Set::const_iterator cbegin() const;
+      IP_Range_Set::const_iterator cend() const;
 
    private:
 
-      std::vector<IP_Range> m_ranges;
+      IP_Range_Set m_ranges;
 };
 
 #endif /* COALESCING_IP_RANGE_SET_H */
