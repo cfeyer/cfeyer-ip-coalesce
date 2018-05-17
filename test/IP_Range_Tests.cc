@@ -5,9 +5,9 @@
 #include "Subnet.h"
 
 TEST(Format, test_to_dotted_octet) {
-   EXPECT_EQ( std::string("0.0.0.0"), to_dotted_octet(0x00000000) );
-   EXPECT_EQ( std::string("255.255.255.255"), to_dotted_octet(0xffffffff) );
-   EXPECT_EQ( std::string("1.2.3.4"), to_dotted_octet(0x01020304) );
+   EXPECT_EQ( "0.0.0.0", to_dotted_octet(0x00000000) );
+   EXPECT_EQ( "255.255.255.255", to_dotted_octet(0xffffffff) );
+   EXPECT_EQ( "1.2.3.4", to_dotted_octet(0x01020304) );
 }
 
 #define EXPECT_IP_EQ(e,a) \
@@ -86,8 +86,8 @@ TEST(Subnet, test_end_address_31_bit_subnet) {
 }
 
 TEST(IP_Range, test_to_dotted_octet) {
-   EXPECT_EQ( std::string("0.0.0.0"), IP_Range(0x00000000, 0xffffffff).to_dotted_octet() );
-   EXPECT_EQ( std::string("0.0.0.0-255.255.255.255"), IP_Range(0x00000000, 0x00000000).to_dotted_octet() );
-   EXPECT_EQ( std::string("192.168.1.0-192.168.1.255"), IP_Range( octets_to_uint32(192,168,1,0), octets_to_uint32(255,255,255,0)).to_dotted_octet() );
+   EXPECT_EQ( "0.0.0.0", IP_Range(0x00000000, 0xffffffff).to_dotted_octet() );
+   EXPECT_EQ( "0.0.0.0-255.255.255.255", IP_Range(0x00000000, 0x00000000).to_dotted_octet() );
+   EXPECT_EQ( "192.168.1.0-192.168.1.255", IP_Range( octets_to_uint32(192,168,1,0), octets_to_uint32(255,255,255,0)).to_dotted_octet() );
 }
 
