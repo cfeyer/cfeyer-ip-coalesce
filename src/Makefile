@@ -1,6 +1,6 @@
-CC_FILES= IP_Range.cpp Subnet.cpp Format.cpp
+CC_FILES= IP_Range.cpp Subnet.cpp Format.cpp Interval.cpp
 
-H_FILES= ../include/IP_Range.h ../include/Subnet.h ../include/Format.h
+H_FILES= ../include/IP_Range.h ../include/Subnet.h ../include/Format.h ../include/Interval.h
 
 LIB_NAME=../lib/libip-coalesce.so
 

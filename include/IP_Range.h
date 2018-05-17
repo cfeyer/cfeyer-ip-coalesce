@@ -15,12 +15,13 @@ class IP_Range
 
       std::string to_dotted_octet() const;
 
-
+      bool is_coalescable( const IP_Range & other ) const;
 
    private:
 
       uint32_t m_start_address;
       uint32_t m_end_address;
+
 };
 
 #endif /* IP_RANGE_H */
