@@ -171,6 +171,17 @@ TEST(IP_Range, test_range_of_size_one_is_not_coalescable_with_a_far_above_range_
    EXPECT_FALSE( IP_Range(0xfffffffd,0xffffffff).is_coalescable( IP_Range(0xffffffff, 0xffffffff) ) );
 }
 
+TEST(IP_Range, test_range_with_discontiguous_subnet_mask_is_not_coalescable_with_itself )
+{
+   EXPECT_FALSE( IP_Range(0, 0xffffff0f).is_coalescable( IP_Range(0, 0xffffff0f) ) );
+}
+
+TEST(IP_Range, test_range_with_discontiguous_subnet_mask_is_not_coalescable_with_encompassing_subnet )
+{
+   EXPECT_FALSE( IP_Range(0, 0xffffff0f).is_coalescable( IP_Range(0, 0xffffff00) ) );
+   EXPECT_FALSE( IP_Range(0, 0xffffff00).is_coalescable( IP_Range(0, 0xffffff0f) ) );
+}
+
 TEST(IP_Range, test_same_address_and_same_netmask_are_equal) {
    EXPECT_TRUE( IP_Range(0,0) == IP_Range(0,0) );
 }

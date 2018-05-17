@@ -30,6 +30,9 @@ class IP_Range
 
       uint32_t m_start_address;
       uint32_t m_end_address;
+
+      static constexpr uint32_t contiguous_subnet_mask = 0;
+      uint32_t m_noncontiguous_subnet_mask;
 };
 
 std::istream & operator >> ( std::istream & strm, IP_Range & range );

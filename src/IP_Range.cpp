@@ -11,7 +11,11 @@
 
 IP_Range::IP_Range( uint32_t subnet_address, uint32_t subnet_mask ) :
    m_start_address( subnet_start_address(subnet_address, subnet_mask) ),
-   m_end_address( subnet_end_address(subnet_address, subnet_mask) )
+   m_end_address( subnet_end_address(subnet_address, subnet_mask) ),
+   m_noncontiguous_subnet_mask(
+      (count_contiguous_network_ones(subnet_mask) == noncontiguous_subnet_mask) ?
+         subnet_mask : contiguous_subnet_mask
+   )
 {
    if( m_end_address < m_start_address )
    {
@@ -26,7 +30,8 @@ IP_Range::IP_Range( uint32_t subnet_address, uint32_t subnet_mask ) :
 
 IP_Range::IP_Range() :
    m_start_address(0),
-   m_end_address(0)
+   m_end_address(0),
+   m_noncontiguous_subnet_mask( contiguous_subnet_mask )
 {
 }
 
@@ -66,8 +71,16 @@ std::string IP_Range::to_dotted_octet() const
 
 bool IP_Range::is_coalescable( const IP_Range & other ) const
 {
-   return is_on_or_adjacent( other.m_start_address, m_start_address, m_end_address ) ||
-          is_on_or_adjacent( other.m_end_address, m_start_address, m_end_address );
+   bool predicate = false;
+
+   if( !m_noncontiguous_subnet_mask && !other.m_noncontiguous_subnet_mask )
+   {
+      predicate =
+         is_on_or_adjacent( other.m_start_address, m_start_address, m_end_address ) ||
+         is_on_or_adjacent( other.m_end_address, m_start_address, m_end_address );
+   }
+
+   return predicate;
 }
 
 
