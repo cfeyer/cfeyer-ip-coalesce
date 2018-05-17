@@ -1,6 +1,6 @@
 #include "Coalescing_IP_Range_Set.h"
 
-void Coalescing_IP_Range_Set::add( const IP_Range & range )
+void Coalescing_IP_Range_Set::insert( const IP_Range & range )
 {
    bool incorporated_via_coalescing = false;
 
@@ -21,7 +21,7 @@ void Coalescing_IP_Range_Set::add( const IP_Range & range )
          Coalescing_IP_Range_Set recoalesced_set;
          for( const IP_Range & range : m_ranges )
          {
-            recoalesced_set.add( range );
+            recoalesced_set.insert( range );
          }
          *this = recoalesced_set;
 

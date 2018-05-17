@@ -11,7 +11,7 @@ class Coalescing_IP_Range_Set
 {
    public:
 
-      void add( const IP_Range & range );
+      void insert( const IP_Range & range );
 
       int size() const;
 

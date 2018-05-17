@@ -298,8 +298,8 @@ TEST(Coalescing_IP_Range_Set, test_add_two_presorted_uncoalescable_ranges ) {
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 2, set.size() );
 
@@ -313,8 +313,8 @@ TEST(Coalescing_IP_Range_Set, test_add_two_presorted_coalescable_ranges ) {
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 1, set.size() );
 
@@ -325,8 +325,8 @@ TEST(Coalescing_IP_Range_Set, test_add_two_unsorted_coalescable_ranges ) {
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 1, set.size() );
 
@@ -337,12 +337,12 @@ TEST(Coalescing_IP_Range_Set, test_add_two_presorted_uncoalescable_ranges_then_a
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 2, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 1, set.size() );
 
@@ -353,13 +353,13 @@ TEST(Coalescing_IP_Range_Set, test_add_three_presorted_uncoalescable_ranges_then
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 3, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 2, set.size() );
 }
@@ -368,13 +368,13 @@ TEST(Coalescing_IP_Range_Set, test_add_three_presorted_uncoalescable_ranges_then
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 3, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)) );
 
    EXPECT_EQ( 1, set.size() );
 
@@ -385,14 +385,14 @@ TEST(Coalescing_IP_Range_Set, test_add_four_presorted_uncoalescable_ranges_then_
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(255,255,255,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,4,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(255,255,255,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 4, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)) );
 
    EXPECT_EQ( 2, set.size() );
 
@@ -406,8 +406,8 @@ TEST(Coalescing_IP_Range_Set, test_add_two_unsorted_uncoalescable_ranges ) {
    Coalescing_IP_Range_Set set;
    EXPECT_EQ( 0, set.size() );
 
-   set.add( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
-   set.add( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) );
+   set.insert( IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) );
 
    EXPECT_EQ( 2, set.size() );
 
