@@ -277,7 +277,7 @@ TEST(IP_Range, test_stream_input_from_empty_stream) {
 
    {
       IP_Range range;
-      strm >> range;
+      EXPECT_TRUE( strm >> range );
       EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
    }
 
