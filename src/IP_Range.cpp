@@ -1,11 +1,13 @@
 #include "IP_Range.h"
 
-#include "Format.h"
 #include <sstream>
 
+#include "Format.h"
+#include "Subnet.h"
+
 IP_Range::IP_Range( uint32_t subnet_address, uint32_t subnet_mask ) :
-   m_start_address( 0 ),
-   m_end_address( 0 )
+   m_start_address( subnet_start_address(subnet_address, subnet_mask) ),
+   m_end_address( subnet_end_address(subnet_address, subnet_mask) )
 {
 }
 

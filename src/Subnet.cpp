@@ -1,18 +1,28 @@
 #include "Subnet.h"
 
 
-uint32_t subnet_begin_address( uint32_t subnet_address, uint32_t subnet_mask )
+uint32_t subnet_start_address( uint32_t subnet_address, uint32_t subnet_mask )
 {
-   return subnet_address & subnet_mask;
+   return subnet_address;
 }
 
 
 uint32_t subnet_end_address( uint32_t subnet_address, uint32_t subnet_mask )
 {
-   return subnet_address | ~subnet_mask;
+   int end_address = subnet_address;
+   int network_bits = count_contiguous_network_ones( subnet_mask );
+
+   if( network_bits != noncontiguous_subnet_mask )
+   {
+      uint64_t addresses_in_subnet = netmask_length_to_address_count( network_bits );
+      uint64_t highest_address_offset = addresses_in_subnet - 1;
+      end_address = subnet_address + static_cast<uint32_t>(highest_address_offset);
+   }
+
+   return end_address;
 }
 
-int count_contiguous_subnet_ones( uint32_t subnet_mask )
+int count_contiguous_network_ones( uint32_t subnet_mask )
 {
    int ones = 0;
    int zeros = 0;
@@ -41,5 +51,13 @@ int count_contiguous_subnet_ones( uint32_t subnet_mask )
    }
 
    return ones; 
+}
+
+
+uint64_t netmask_length_to_address_count( int netmask_length_bits )
+{
+   int host_bits = 32 - netmask_length_bits;
+   uint64_t address_count = 1ul << host_bits;
+   return address_count;
 }
 
