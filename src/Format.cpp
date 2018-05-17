@@ -1,6 +1,7 @@
 #include "Format.h"
 
 #include <sstream>
+#include <vector>
 
 std::string to_dotted_octet( uint32_t ip_address )
 {

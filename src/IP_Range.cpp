@@ -2,6 +2,8 @@
 
 #include <sstream>
 #include <algorithm>
+#include <vector>
+#include <stdexcept>
 
 #include "Format.h"
 #include "Subnet.h"
@@ -86,4 +88,29 @@ IP_Range operator + ( const IP_Range & a, const IP_Range & b ) {
    result.m_end_address = std::max( a.m_end_address, b.m_end_address );
 
    return result;
+}
+
+
+std::istream & operator >> ( std::istream & istrm, IP_Range & range )
+{
+   std::vector<std::string> substrings(8);
+   std::getline( istrm, substrings[0], '.' );
+   std::getline( istrm, substrings[1], '.' );
+   std::getline( istrm, substrings[2], '.' );
+   std::getline( istrm, substrings[3], '/' );
+   std::getline( istrm, substrings[4], '.' );
+   std::getline( istrm, substrings[5], '.' );
+   std::getline( istrm, substrings[6], '.' );
+   istrm >> substrings[7];
+
+   std::vector<uint8_t> octets(8);
+   for( int i = 0; i < 8; i++ )
+   {
+      octets[i] = std::stoi( substrings[i] );
+   }
+
+   range = IP_Range( from_octets(octets[0], octets[1], octets[2], octets[3]),
+                     from_octets(octets[4], octets[5], octets[6], octets[7]) );
+
+   return istrm;
 }

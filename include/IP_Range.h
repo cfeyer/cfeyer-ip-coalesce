@@ -3,11 +3,13 @@
 
 #include <cstdint>
 #include <string>
+#include <iosfwd>
 
 class IP_Range
 {
    public:
 
+      IP_Range();
       IP_Range( uint32_t subnet_address, uint32_t subnet_mask );
 
       uint32_t get_start_address() const;
@@ -19,16 +21,14 @@ class IP_Range
 
       bool operator == ( const IP_Range & other ) const;
 
-
    private:
 
       friend IP_Range operator + ( const IP_Range & a, const IP_Range & b );
 
-      IP_Range();
-
       uint32_t m_start_address;
       uint32_t m_end_address;
-
 };
+
+std::istream & operator >> ( std::istream & strm, IP_Range & range );
 
 #endif /* IP_RANGE_H */

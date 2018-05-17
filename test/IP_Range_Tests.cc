@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 
+#include <sstream>
+
 #include "IP_Range.h"
 #include "Format.h"
 #include "Subnet.h"
@@ -213,4 +215,54 @@ TEST(IP_Range, test_coalesce_with_subset_range) {
    EXPECT_EQ( IP_Range(from_octets(192,168,0,0), from_octets(255,255,254,0)),
                  IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
                  IP_Range(from_octets(192,168,0,0), from_octets(255,255,254,0)) );
+}
+
+TEST(IP_Range, test_stream_input_0_0_0_0_slash_255_255_255_255) {
+   std::istringstream strm( "0.0.0.0/255.255.255.255" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(0,0,0,0), from_octets(255,255,255,255)) == range );
+}
+
+TEST(IP_Range, test_stream_input_0_0_0_0_slash_0_0_0_0) {
+   std::istringstream strm( "0.0.0.0/0.0.0.0" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(0,0,0,0), from_octets(0,0,0,0)) == range );
+}
+
+TEST(IP_Range, test_stream_input_255_255_255_255_slash_255_255_255_255) {
+   std::istringstream strm( "255.255.255.255/255.255.255.255" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(255,255,255,255), from_octets(255,255,255,255)) == range );
+}
+
+TEST(IP_Range, test_stream_input_192_168_1_2_slash_255_255_255_0) {
+   std::istringstream strm( "192.168.1.2/255.255.255.0" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
+}
+
+TEST(IP_Range, test_stream_input_three_space_delimited_ranges) {
+   std::istringstream strm( "0.0.0.0/0.0.0.0 255.255.255.255/255.255.255.255 192.168.1.2/255.255.255.0" );
+
+   {
+      IP_Range range;
+      strm >> range;
+      EXPECT_TRUE( IP_Range(from_octets(0,0,0,0), from_octets(0,0,0,0)) == range );
+   }
+
+   {
+      IP_Range range;
+      strm >> range;
+      EXPECT_TRUE( IP_Range(from_octets(255,255,255,255), from_octets(255,255,255,255)) == range );
+   }
+
+   {
+      IP_Range range;
+      strm >> range;
+      EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
+   }
 }
