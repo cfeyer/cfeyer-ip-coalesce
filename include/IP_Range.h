@@ -17,7 +17,14 @@ class IP_Range
 
       bool is_coalescable( const IP_Range & other ) const;
 
+      bool operator == ( const IP_Range & other ) const;
+
+
    private:
+
+      friend IP_Range operator + ( const IP_Range & a, const IP_Range & b );
+
+      IP_Range();
 
       uint32_t m_start_address;
       uint32_t m_end_address;

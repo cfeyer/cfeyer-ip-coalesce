@@ -1,6 +1,7 @@
 #include "IP_Range.h"
 
 #include <sstream>
+#include <algorithm>
 
 #include "Format.h"
 #include "Subnet.h"
@@ -15,9 +16,16 @@ IP_Range::IP_Range( uint32_t subnet_address, uint32_t subnet_mask ) :
       std::ostringstream msg;
       msg << "IP_Range: m_end_address < m_start_address "
           << "(m_start_address=" << m_start_address << ", "
-          << "m_end_address=" << m_end_address << ")";
+          << "m_end_address=" << m_end_address << ") "
+          << "(network too large for its start address?)";
       throw std::logic_error( msg.str() );
    }
+}
+
+IP_Range::IP_Range() :
+   m_start_address(0),
+   m_end_address(0)
+{
 }
 
 
@@ -61,3 +69,21 @@ bool IP_Range::is_coalescable( const IP_Range & other ) const
 }
 
 
+bool IP_Range::operator == ( const IP_Range & other ) const
+{
+   return (m_start_address == other.m_start_address) &&
+          (m_end_address == other.m_end_address);
+}
+
+
+IP_Range operator + ( const IP_Range & a, const IP_Range & b ) {
+
+   if( !a.is_coalescable(b) ) throw std::runtime_error("Ranges not coalescable");
+
+   IP_Range result;
+
+   result.m_start_address = std::min( a.m_start_address, b.m_start_address );
+   result.m_end_address = std::max( a.m_end_address, b.m_end_address );
+
+   return result;
+}

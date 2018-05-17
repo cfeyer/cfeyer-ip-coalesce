@@ -6,6 +6,6 @@
 
 std::string to_dotted_octet( uint32_t ip_address );
 
-uint32_t octets_to_uint32( uint8_t o3, uint8_t o2, uint8_t o1, uint8_t o0 );
+uint32_t from_octets( uint8_t o3, uint8_t o2, uint8_t o1, uint8_t o0 );
 
 #endif /*FORMAT_H*/
