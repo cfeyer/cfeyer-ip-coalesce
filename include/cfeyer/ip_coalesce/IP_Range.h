@@ -43,6 +43,7 @@ class IP_Range
 
       std::string to_start_dash_end() const;
       std::string to_start_slash_subnet_mask() const;
+      std::string to_cidr() const;
 };
 
 std::istream & operator >> ( std::istream & strm, IP_Range & range );

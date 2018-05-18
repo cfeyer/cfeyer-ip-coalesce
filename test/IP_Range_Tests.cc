@@ -237,8 +237,13 @@ TEST(Interval_Is_On_Or_Adjacent, test_far_above_interval) {
 
 TEST(IP_Range, test_to_string) {
    EXPECT_EQ( "0.0.0.0", IP_Range(0x00000000, 0xffffffff).to_string() );
-   EXPECT_EQ( "0.0.0.0-255.255.255.255", IP_Range(0x00000000, 0x00000000).to_string() );
-   EXPECT_EQ( "192.168.1.0-192.168.1.255", IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0)).to_string() );
+   EXPECT_EQ( "0.0.0.0/31", IP_Range(0x00000000, 0xfffffffe).to_string() );
+   EXPECT_EQ( "0.0.0.0/0", IP_Range(0x00000000, 0x00000000).to_string() );
+   EXPECT_EQ( "10.42.0.0/16", IP_Range(from_octets(10,42,0,0),from_octets(255,255,0,0)).to_string() );
+   EXPECT_EQ( "192.168.1.0/24", IP_Range(from_octets(192,168,1,0),from_octets(255,255,255,0)).to_string() );
+   EXPECT_EQ( "192.168.1.0-192.168.2.255",
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+               IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0))).to_string() );
 }
 
 TEST(IP_Range, test_to_string_with_discontiguous_subnet_mask) {
@@ -511,12 +516,18 @@ TEST(IP_Range, test_stream_output) {
    {
       std::ostringstream strm;
       strm << IP_Range(0x00000000, 0x00000000);
-      EXPECT_EQ( "0.0.0.0-255.255.255.255", strm.str() );
+      EXPECT_EQ( "0.0.0.0/0", strm.str() );
    }
    {
       std::ostringstream strm;
       strm << IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0) );
-      EXPECT_EQ( "192.168.1.0-192.168.1.255", strm.str() );
+      EXPECT_EQ( "192.168.1.0/24", strm.str() );
+   }
+   {
+      std::ostringstream strm;
+      strm << IP_Range( from_octets(192,168,1,0), from_octets(255,255,255,0) ) +
+              IP_Range( from_octets(192,168,2,0), from_octets(255,255,255,0) );
+      EXPECT_EQ( "192.168.1.0-192.168.2.255", strm.str() );
    }
 }
 

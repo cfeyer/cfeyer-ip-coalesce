@@ -57,7 +57,14 @@ std::string IP_Range::to_string() const
 
    if( !m_noncontiguous_subnet_mask )
    {
-      str = to_start_dash_end();
+      if( (size() > 1) && is_subnet() )
+      {
+         str = to_cidr();
+      }
+      else
+      {
+         str = to_start_dash_end();
+      }
    }
    else
    {
@@ -97,6 +104,17 @@ std::string IP_Range::to_start_slash_subnet_mask() const
 
    strm << to_dotted_octet( m_start_address ) << "/"
         << to_dotted_octet( m_noncontiguous_subnet_mask );
+
+   return strm.str();
+}
+
+
+std::string IP_Range::to_cidr() const
+{
+   std::ostringstream strm;
+
+   strm << to_dotted_octet( m_start_address ) << "/"
+        << (32 - ::cfeyer::ip_coalesce::log_base_2(size()) );
 
    return strm.str();
 }
