@@ -2,11 +2,15 @@
 
 #include <sstream>
 
-#include <cfeyer/ip-coalesce/IP_Range.h>
+#include <cfeyer/ip_coalesce/IP_Range.h>
 #include "Format.h"
 #include "Subnet.h"
 #include "Interval.h"
-#include <cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h>
+#include <cfeyer/ip_coalesce/Coalescing_IP_Range_Set.h>
+
+
+using namespace cfeyer::ip_coalesce;
+
 
 TEST(Format, test_to_dotted_octet) {
    EXPECT_EQ( "0.0.0.0", to_dotted_octet(0x00000000) );

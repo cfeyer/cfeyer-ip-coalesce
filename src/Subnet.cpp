@@ -1,5 +1,8 @@
 #include "Subnet.h"
 
+namespace cfeyer {
+namespace ip_coalesce {
+
 
 uint32_t subnet_start_address( uint32_t subnet_address, uint32_t subnet_mask )
 {
@@ -61,3 +64,5 @@ uint64_t netmask_length_to_address_count( int netmask_length_bits )
    return address_count;
 }
 
+} // namespace ip_coalesce
+} // namespace cfeyer

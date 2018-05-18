@@ -1,4 +1,4 @@
-#include <cfeyer/ip-coalesce/IP_Range.h>
+#include <cfeyer/ip_coalesce/IP_Range.h>
 
 #include <sstream>
 #include <algorithm>
@@ -8,6 +8,9 @@
 #include "Format.h"
 #include "Subnet.h"
 #include "Interval.h"
+
+namespace cfeyer {
+namespace ip_coalesce {
 
 IP_Range::IP_Range( uint32_t subnet_address, uint32_t subnet_mask ) :
    m_start_address( subnet_start_address(subnet_address, subnet_mask) ),
@@ -71,14 +74,14 @@ std::string IP_Range::to_start_dash_end() const
 
    if( m_start_address == m_end_address )
    {
-      str = ::to_dotted_octet( m_start_address );
+      str = to_dotted_octet( m_start_address );
    }
    else
    {
       std::ostringstream strm;
-      strm << ::to_dotted_octet( m_start_address )
+      strm << to_dotted_octet( m_start_address )
            << "-"
-           << ::to_dotted_octet( m_end_address );
+           << to_dotted_octet( m_end_address );
       str = strm.str();
    }
 
@@ -92,8 +95,8 @@ std::string IP_Range::to_start_slash_subnet_mask() const
 
    std::ostringstream strm;
 
-   strm << ::to_dotted_octet( m_start_address ) << "/"
-        << ::to_dotted_octet( m_noncontiguous_subnet_mask );
+   strm << to_dotted_octet( m_start_address ) << "/"
+        << to_dotted_octet( m_noncontiguous_subnet_mask );
 
    return strm.str();
 }
@@ -188,3 +191,6 @@ std::ostream & operator << ( std::ostream & ostrm, const IP_Range & range )
    ostrm << range.to_string();
    return ostrm;
 }
+
+} // namespace ip_coalesce
+} // namespace cfeyer

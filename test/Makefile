@@ -76,7 +76,7 @@ IP_Range_Tests.o : IP_Range_Tests.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c IP_Range_Tests.cc
 
 test : IP_Range_Tests.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -L../lib -lip-coalesce -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -L../lib -lcfeyer_ip_coalesce -o $@
 
 .PHONY : check
 

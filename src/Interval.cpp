@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+namespace cfeyer {
+namespace ip_coalesce {
 
 bool is_on_or_adjacent( uint32_t x, uint32_t a, uint32_t b )
 {
@@ -13,3 +15,5 @@ bool is_on_or_adjacent( uint32_t x, uint32_t a, uint32_t b )
    return (min_on_or_adjacent <= x) && (x <= max_on_or_adjacent);
 }
 
+}
+}

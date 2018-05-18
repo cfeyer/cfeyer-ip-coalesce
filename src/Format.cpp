@@ -3,6 +3,9 @@
 #include <sstream>
 #include <vector>
 
+namespace cfeyer {
+namespace ip_coalesce {
+
 std::string to_dotted_octet( uint32_t ip_address )
 {
    std::ostringstream strm;
@@ -29,3 +32,6 @@ uint32_t from_octets( uint8_t o3, uint8_t o2, uint8_t o1, uint8_t o0 )
    uint32_t i = (o3 << 24) | (o2 << 16) | (o1 << 8) | (o0);
    return i;
 }
+
+} // namespace ip_coalesce
+} // namespace cfeyer

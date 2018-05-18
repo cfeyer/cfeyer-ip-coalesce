@@ -5,6 +5,9 @@
 #include <string>
 #include <iosfwd>
 
+namespace cfeyer {
+namespace ip_coalesce {
+
 class IP_Range
 {
    public:
@@ -40,5 +43,8 @@ class IP_Range
 
 std::istream & operator >> ( std::istream & strm, IP_Range & range );
 std::ostream & operator << ( std::ostream & strm, const IP_Range & range );
+
+} // namespace ip_coalesce
+} // namespace cfeyer
 
 #endif /* IP_RANGE_H */

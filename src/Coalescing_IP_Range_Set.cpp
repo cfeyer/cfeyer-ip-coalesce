@@ -1,4 +1,7 @@
-#include <cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h>
+#include <cfeyer/ip_coalesce/Coalescing_IP_Range_Set.h>
+
+namespace cfeyer {
+namespace ip_coalesce {
 
 void Coalescing_IP_Range_Set::insert( const IP_Range & range )
 {
@@ -52,3 +55,6 @@ int Coalescing_IP_Range_Set::size() const
 {
   return m_ranges.size();
 }
+
+} // namespace ip_coalesce
+} // namespace cfeyer

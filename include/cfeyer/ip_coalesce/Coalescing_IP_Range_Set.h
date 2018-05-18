@@ -3,7 +3,10 @@
 
 #include <set>
 
-#include <cfeyer/ip-coalesce/IP_Range.h>
+#include <cfeyer/ip_coalesce/IP_Range.h>
+
+namespace cfeyer {
+namespace ip_coalesce {
 
 using IP_Range_Set = std::set<IP_Range>;
 
@@ -22,5 +25,8 @@ class Coalescing_IP_Range_Set
 
       IP_Range_Set m_ranges;
 };
+
+} // namespace ip_coalesce
+} // namespace cfeyer
 
 #endif /* COALESCING_IP_RANGE_SET_H */
