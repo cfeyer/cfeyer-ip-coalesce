@@ -6,7 +6,15 @@ namespace ip_coalesce {
 
 uint32_t subnet_start_address( uint32_t subnet_address, uint32_t subnet_mask )
 {
-   return subnet_address;
+   int start_address = subnet_address;
+   int network_bits = count_contiguous_network_ones( subnet_mask );
+
+   if( network_bits != noncontiguous_subnet_mask )
+   {
+      start_address = subnet_address & subnet_mask;
+   }
+
+   return start_address;
 }
 
 
@@ -19,7 +27,8 @@ uint32_t subnet_end_address( uint32_t subnet_address, uint32_t subnet_mask )
    {
       uint64_t addresses_in_subnet = netmask_length_to_address_count( network_bits );
       uint64_t highest_address_offset = addresses_in_subnet - 1;
-      end_address = subnet_address + static_cast<uint32_t>(highest_address_offset);
+      uint32_t start_address = subnet_start_address( subnet_address, subnet_mask );
+      end_address = start_address + static_cast<uint32_t>(highest_address_offset);
    }
 
    return end_address;

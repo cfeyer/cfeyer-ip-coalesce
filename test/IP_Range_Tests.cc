@@ -48,49 +48,85 @@ TEST(Subnet, test_netmask_length_to_address_count) {
 
 TEST(Subnet, test_start_address_0_bit_subnet) {
    EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,0,0), 0 ) );
+
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(255,0,0,0), 0 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,255,0,0), 0 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,255,0), 0 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,0,255), 0 ) );
 }
 
 TEST(Subnet, test_end_address_0_bit_subnet) {
    EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(0,0,0,0), 0 ) );
+
+   EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(255,0,0,0), 0 ) );
+   EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(0,255,0,0), 0 ) );
+   EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(0,0,255,0), 0 ) );
+   EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(0,0,0,255), 0 ) );
 }
 
 TEST(Subnet, test_start_address_1_bit_subnet) {
    EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,0,0), 0x80000000 ) );
-   EXPECT_IP_EQ( 0xfffffffe, subnet_start_address( from_octets(255,255,255,254), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x80000000, subnet_start_address( from_octets(128,0,0,0), 0x80000000 ) );
+
+   EXPECT_IP_EQ( 0x80000000, subnet_start_address( from_octets(255,0,0,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,255,0,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,255,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x00000000, subnet_start_address( from_octets(0,0,0,255), 0x80000000 ) );
 }
 
 TEST(Subnet, test_end_address_1_bit_subnet) {
    EXPECT_IP_EQ( 0x7fffffff, subnet_end_address( from_octets(0,0,0,0), 0x80000000 ) );
+
+   EXPECT_IP_EQ( 0xffffffff, subnet_end_address( from_octets(255,0,0,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x7fffffff, subnet_end_address( from_octets(0,255,0,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x7fffffff, subnet_end_address( from_octets(0,0,255,0), 0x80000000 ) );
+   EXPECT_IP_EQ( 0x7fffffff, subnet_end_address( from_octets(0,0,0,255), 0x80000000 ) );
 }
 
 TEST(Subnet, test_start_address_24_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,0), from_octets(255,255,255,0) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,0), subnet_start_address( from_octets(10,20,30,0), from_octets(255,255,255,0) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,1), from_octets(255,255,255,0) ) );
+   EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,254), from_octets(255,255,255,0) ) );
 }
 
 TEST(Subnet, test_end_address_24_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,255), subnet_end_address( from_octets(192,168,1,0), from_octets(255,255,255,0) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,255), subnet_end_address( from_octets(10,20,30,0), from_octets(255,255,255,0) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,255), subnet_end_address( from_octets(192,168,1,1), from_octets(255,255,255,0) ) );
+   EXPECT_IP_EQ( from_octets(192,168,1,255), subnet_end_address( from_octets(192,168,1,254), from_octets(255,255,255,0) ) );
 }
 
 TEST(Subnet, test_start_address_32_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,0), from_octets(255,255,255,255) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,40), subnet_start_address( from_octets(10,20,30,40), from_octets(255,255,255,255) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,1), subnet_start_address( from_octets(192,168,1,1), from_octets(255,255,255,255) ) );
+   EXPECT_IP_EQ( from_octets(192,168,1,254), subnet_start_address( from_octets(192,168,1,254), from_octets(255,255,255,255) ) );
 }
 
 TEST(Subnet, test_end_address_32_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_end_address( from_octets(192,168,1,0), from_octets(255,255,255,255) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,40), subnet_end_address( from_octets(10,20,30,40), from_octets(255,255,255,255) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,1), subnet_end_address( from_octets(192,168,1,1), from_octets(255,255,255,255) ) );
+   EXPECT_IP_EQ( from_octets(192,168,1,254), subnet_end_address( from_octets(192,168,1,254), from_octets(255,255,255,255) ) );
 }
 
 TEST(Subnet, test_start_address_31_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,0), from_octets(255,255,255,254) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,40), subnet_start_address( from_octets(10,20,30,40), from_octets(255,255,255,254) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,0), subnet_start_address( from_octets(192,168,1,1), from_octets(255,255,255,254) ) );
 }
 
 TEST(Subnet, test_end_address_31_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,1), subnet_end_address( from_octets(192,168,1,0), from_octets(255,255,255,254) ) );
    EXPECT_IP_EQ( from_octets(10,20,30,41), subnet_end_address( from_octets(10,20,30,40), from_octets(255,255,255,254) ) );
+
+   EXPECT_IP_EQ( from_octets(192,168,1,1), subnet_end_address( from_octets(192,168,1,1), from_octets(255,255,255,254) ) );
 }
 
 TEST(Interval_Is_On_Or_Adjacent, test_throw_if_bounds_are_backwards) {
@@ -212,8 +248,8 @@ TEST(IP_Range, test_same_address_and_same_netmask_are_not_less_than) {
 }
 
 TEST(IP_Range, test_less_than_gives_precedence_to_start_address_over_subnet_size) {
-   EXPECT_TRUE( IP_Range(0,0xffff0000) < IP_Range(1, 0xffffff00) );
-   EXPECT_FALSE( IP_Range(1,0xffffff00) < IP_Range(0, 0xffff0000) );
+   EXPECT_TRUE( IP_Range(0,0xffff0000) < IP_Range(from_octets(128,0,0,0), 0xffffff00) );
+   EXPECT_FALSE( IP_Range(from_octets(128,0,0,0),0xffffff00) < IP_Range(0, 0xffff0000) );
 }
 
 TEST(IP_Range, test_less_than_defers_to_subnet_size_given_equal_start_address) {
@@ -262,6 +298,20 @@ TEST(IP_Range, test_coalesce_with_subset_range) {
    EXPECT_EQ( IP_Range(from_octets(192,168,0,0), from_octets(255,255,254,0)),
                  IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
                  IP_Range(from_octets(192,168,0,0), from_octets(255,255,254,0)) );
+}
+
+TEST(IP_Range, test_sloppy_subnet_addresses_are_equivalent_to_subnet_boundary_addresses) {
+   EXPECT_EQ( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)),
+              IP_Range(from_octets(192,168,1,1), from_octets(255,255,255,0)) );
+
+   EXPECT_EQ( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)),
+              IP_Range(from_octets(192,168,1,255), from_octets(255,255,255,0)) );
+
+   EXPECT_EQ( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)),
+              IP_Range(from_octets(192,168,1,1), from_octets(255,255,0,0)) );
+
+   EXPECT_EQ( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)),
+              IP_Range(from_octets(192,168,255,255), from_octets(255,255,0,0)) );
 }
 
 TEST(IP_Range, test_stream_input_0_0_0_0_slash_255_255_255_255) {
