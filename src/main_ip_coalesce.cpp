@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "IP_Range.h"
-#include "Coalescing_IP_Range_Set.h"
+#include <cfeyer/ip-coalesce/IP_Range.h>
+#include <cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h>
 
 int main( int argc, char * argv[] )
 {

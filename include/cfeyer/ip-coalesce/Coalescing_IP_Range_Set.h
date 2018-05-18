@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "IP_Range.h"
+#include <cfeyer/ip-coalesce/IP_Range.h>
 
 using IP_Range_Set = std::set<IP_Range>;
 

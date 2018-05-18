@@ -1,4 +1,4 @@
-#include "Coalescing_IP_Range_Set.h"
+#include <cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h>
 
 void Coalescing_IP_Range_Set::insert( const IP_Range & range )
 {

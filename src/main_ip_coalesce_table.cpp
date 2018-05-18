@@ -3,8 +3,8 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "IP_Range.h"
-#include "Coalescing_IP_Range_Set.h"
+#include <cfeyer/ip-coalesce/IP_Range.h>
+#include <cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h>
 
 void process_field_2( const std::string & field_2 )
 {

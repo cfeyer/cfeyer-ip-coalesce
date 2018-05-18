@@ -6,11 +6,11 @@ LIB_CC_FILES = \
    Coalescing_IP_Range_Set.cpp
 
 LIB_H_FILES = \
-   ../include/IP_Range.h \
-   ../include/Subnet.h \
-   ../include/Format.h \
-   ../include/Interval.h \
-   ../include/Coalescing_IP_Range_Set.h
+   ../include/cfeyer/ip-coalesce/IP_Range.h \
+   Subnet.h \
+   Format.h \
+   Interval.h \
+   ../include/cfeyer/ip-coalesce/Coalescing_IP_Range_Set.h
 
 LIB_BASE_NAME = ip-coalesce
 LIB_PATH = ../lib/lib$(LIB_BASE_NAME).so

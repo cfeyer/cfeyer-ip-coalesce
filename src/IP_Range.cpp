@@ -1,4 +1,4 @@
-#include "IP_Range.h"
+#include <cfeyer/ip-coalesce/IP_Range.h>
 
 #include <sstream>
 #include <algorithm>
