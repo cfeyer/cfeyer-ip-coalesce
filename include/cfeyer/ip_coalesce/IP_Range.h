@@ -22,6 +22,10 @@ class IP_Range
 
       bool is_coalescable( const IP_Range & other ) const;
 
+      bool is_subnet() const;
+
+      uint64_t size() const;
+
       bool operator == ( const IP_Range & other ) const;
       bool operator < ( const IP_Range & rhs ) const;
 

@@ -129,6 +129,66 @@ TEST(Subnet, test_end_address_31_bit_subnet) {
    EXPECT_IP_EQ( from_octets(192,168,1,1), subnet_end_address( from_octets(192,168,1,1), from_octets(255,255,255,254) ) );
 }
 
+TEST(Subnet, test_is_power_of_2) {
+   EXPECT_FALSE( is_power_of_2(0) );
+   EXPECT_TRUE( is_power_of_2(1) );
+   EXPECT_TRUE( is_power_of_2(2) );
+   EXPECT_FALSE( is_power_of_2(3) );
+   EXPECT_FALSE( is_power_of_2(0xffffffff) );
+   EXPECT_TRUE( is_power_of_2(0x100000000) );
+}
+
+TEST(Subnet, test_log_base_2_for_powers_of_2) {
+   EXPECT_EQ( 0, log_base_2(1) ); 
+   EXPECT_EQ( 1, log_base_2(2) ); 
+   EXPECT_EQ( 2, log_base_2(4) ); 
+   EXPECT_EQ( 3, log_base_2(8) ); 
+   EXPECT_EQ( 8, log_base_2(256) ); 
+   EXPECT_EQ( 32, log_base_2(0x100000000) ); 
+}
+
+TEST(Subnet, test_log_base_2_throws_exception_if_arg_not_power_of_2) {
+   EXPECT_ANY_THROW( log_base_2(0) );
+   EXPECT_ANY_THROW( log_base_2(3) );
+   EXPECT_ANY_THROW( log_base_2(0xffffffff) );
+}
+
+TEST(Subnet, test_size_to_subnet_mask_for_sizes_that_are_powers_of_two) {
+   EXPECT_EQ( 0xffffffff, size_to_subnet_mask(1) );
+   EXPECT_EQ( 0xfffffffe, size_to_subnet_mask(2) );
+   EXPECT_EQ( 0xffffff00, size_to_subnet_mask(256) );
+   EXPECT_EQ( 0x80000000, size_to_subnet_mask(2147483648) );
+   EXPECT_EQ( 0x00000000, size_to_subnet_mask(4294967296) );
+}
+
+TEST(Subnet, test_size_to_subnet_mask_throws_exception_for_sizes_that_are_not_powers_of_two) {
+   EXPECT_ANY_THROW( size_to_subnet_mask( 3 ) );
+   EXPECT_ANY_THROW( size_to_subnet_mask( 0xffffffff ) );
+}
+
+TEST(Subnet, test_size_to_subnet_mask_throws_exception_for_sizes_larger_than_2_exp_32) {
+   EXPECT_ANY_THROW( size_to_subnet_mask( 0x1000000000 ) );
+}
+
+TEST(Subnet, test_is_subnet_true_when_size_is_power_of_two_and_start_address_aligned_with_boundary) {
+   EXPECT_TRUE( is_subnet(from_octets(192,168,1,0), 256) );
+   EXPECT_TRUE( is_subnet(from_octets(0,0,0,0), 0x100000000) );
+   EXPECT_TRUE( is_subnet(from_octets(192,168,1,23), 1) );
+}
+
+TEST(Subnet, test_is_subnet_false_when_size_is_power_of_two_and_start_address_not_aligned_with_boundary) {
+   EXPECT_FALSE( is_subnet(from_octets(192,168,1,1), 256) );
+   EXPECT_FALSE( is_subnet(from_octets(1,0,0,0), 0x100000000) );
+}
+
+TEST(Subnet, test_is_subnet_false_when_size_is_not_power_of_two_and_start_address_aligned_with_boundary) {
+   EXPECT_FALSE( is_subnet(from_octets(192,168,1,0), 255) );
+}
+
+TEST(Subnet, test_is_subnet_false_when_size_is_not_power_of_two_and_start_address_not_aligned_with_boundary) {
+   EXPECT_FALSE( is_subnet(from_octets(192,168,1,1), 255) );
+}
+
 TEST(Interval_Is_On_Or_Adjacent, test_throw_if_bounds_are_backwards) {
    EXPECT_ANY_THROW( is_on_or_adjacent( 2, 3, 1 ) );
 }
@@ -312,6 +372,69 @@ TEST(IP_Range, test_sloppy_subnet_addresses_are_equivalent_to_subnet_boundary_ad
 
    EXPECT_EQ( IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)),
               IP_Range(from_octets(192,168,255,255), from_octets(255,255,0,0)) );
+}
+
+TEST(IP_Range, test_size_after_construction) {
+   EXPECT_EQ( 1, IP_Range(from_octets(192,168,1,1), from_octets(255,255,255,255)).size() );
+   EXPECT_EQ( 256, IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)).size() );
+   EXPECT_EQ( 65536, IP_Range(from_octets(192,168,0,0), from_octets(255,255,0,0)).size() );
+   EXPECT_EQ( 0x100000000, IP_Range(from_octets(0,0,0,0), from_octets(0,0,0,0)).size() );
+
+   EXPECT_EQ( 1, IP_Range(from_octets(192,168,1,1), from_octets(255,255,255,255)).size() );
+   EXPECT_EQ( 256, IP_Range(from_octets(192,168,1,1), from_octets(255,255,255,0)).size() );
+   EXPECT_EQ( 65536, IP_Range(from_octets(192,168,0,1), from_octets(255,255,0,0)).size() );
+   EXPECT_EQ( 0x100000000, IP_Range(from_octets(0,0,0,1), from_octets(0,0,0,0)).size() );
+}
+
+TEST(IP_Range, test_size_after_coalescing_with_equivalent_range) {
+   EXPECT_EQ( 256,
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+               IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0))).size() );
+
+   EXPECT_EQ( 256,
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+               IP_Range(from_octets(192,168,1,128), from_octets(255,255,255,0))).size() );
+}
+
+TEST(IP_Range, test_size_after_coalescing_with_nested_range) {
+   EXPECT_EQ( 256,
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+               IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,254))).size() );
+
+   EXPECT_EQ( 256,
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,254)) +
+               IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0))).size() );
+}
+
+TEST(IP_Range, test_size_after_coalescing_with_neighbor) {
+   EXPECT_EQ( 512,
+              (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+               IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0))).size() );
+}
+
+TEST(IP_Range, test_is_subnet_is_true_for_contiguous_subnet_masks) {
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)).is_subnet() );
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,1), from_octets(255,255,255,0)).is_subnet() );
+
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,0), from_octets(255,255,0,0)).is_subnet() );
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,1), from_octets(255,255,0,0)).is_subnet() );
+}
+
+TEST(IP_Range, test_is_subnet_is_false_for_noncontiguous_subnet_masks) {
+   EXPECT_FALSE( IP_Range(from_octets(192,168,1,0), from_octets(255,0,255,0)).is_subnet() );
+}
+
+TEST(IP_Range, test_is_subnet_is_true_after_coalescing_sibling_subnets) {
+   EXPECT_TRUE( (IP_Range(from_octets(192,168,0,0), from_octets(255,255,255,0)) +
+                 IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0))).is_subnet() );
+
+   EXPECT_TRUE( (IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0)) +
+                 IP_Range(from_octets(192,168,3,0), from_octets(255,255,255,0))).is_subnet() );
+}
+
+TEST(IP_Range, test_is_subnet_is_false_after_coalescing_nonsibling_subnets) {
+   EXPECT_FALSE( (IP_Range(from_octets(192,168,1,0), from_octets(255,255,255,0)) +
+                  IP_Range(from_octets(192,168,2,0), from_octets(255,255,255,0))).is_subnet() );
 }
 
 TEST(IP_Range, test_stream_input_0_0_0_0_slash_255_255_255_255) {

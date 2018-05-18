@@ -117,6 +117,19 @@ bool IP_Range::is_coalescable( const IP_Range & other ) const
 }
 
 
+bool IP_Range::is_subnet() const
+{
+   return (m_noncontiguous_subnet_mask == contiguous_subnet_mask) &&
+          ::cfeyer::ip_coalesce::is_subnet( m_start_address, size() );
+}
+
+
+uint64_t IP_Range::size() const
+{
+   return (static_cast<uint64_t>(m_end_address) - static_cast<uint64_t>(m_start_address)) + 1;
+}
+
+
 bool IP_Range::operator == ( const IP_Range & other ) const
 {
    return (m_start_address == other.m_start_address) &&
