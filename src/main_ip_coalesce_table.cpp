@@ -30,33 +30,25 @@
 
 using namespace cfeyer::ip_coalesce;
 
-void process_field_2( const std::string & field_2 )
+
+void process_line( const std::string & line );
+void process_field_2( const std::string & field_2 );
+
+
+int main( int argc, char * argv[] )
 {
-   std::istringstream f2_strm( field_2 );
-   Coalescing_IP_Range_Set set;
-   std::string range_str;
+   std::string line;
 
-   static constexpr char item_delim = ',';
-
-   while( std::getline( f2_strm, range_str, item_delim ) )
+   while( std::getline( std::cin, line ) )
    {
-      std::istringstream range_strm( range_str );
-      IP_Range range;
-      range_strm >> range;
-      set.insert( range );
+      process_line( line );
    }
 
-   bool needs_preceeding_delimiter = false;
-   for( auto range : set )
-   {
-      if( needs_preceeding_delimiter )
-      {
-         std::cout << item_delim;
-      }
-      std::cout << range;
-      needs_preceeding_delimiter = true;
-   }
+   std::cout.flush();
+
+   return 0;
 }
+
 
 void process_line( const std::string & line )
 {
@@ -87,17 +79,32 @@ void process_line( const std::string & line )
    std::cout << '\n';
 }
 
-int main( int argc, char * argv[] )
-{
-   std::string line;
 
-   while( std::getline( std::cin, line ) )
+void process_field_2( const std::string & field_2 )
+{
+   std::istringstream f2_strm( field_2 );
+   Coalescing_IP_Range_Set set;
+   std::string range_str;
+
+   static constexpr char item_delim = ',';
+
+   while( std::getline( f2_strm, range_str, item_delim ) )
    {
-      process_line( line );
+      std::istringstream range_strm( range_str );
+      IP_Range range;
+      range_strm >> range;
+      set.insert( range );
    }
 
-   std::cout.flush();
-
-   return 0;
+   bool needs_preceeding_delimiter = false;
+   for( auto range : set )
+   {
+      if( needs_preceeding_delimiter )
+      {
+         std::cout << item_delim;
+      }
+      std::cout << range;
+      needs_preceeding_delimiter = true;
+   }
 }
 
