@@ -28,7 +28,7 @@
 #include <stdexcept>
 
 #include "Format.h"
-#include "Subnet.h"
+#include "CIDR_Network.h"
 #include "Interval.h"
 
 namespace cfeyer {

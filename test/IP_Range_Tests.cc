@@ -26,7 +26,7 @@
 
 #include <cfeyer/ip_coalesce/IP_Range.h>
 #include "Format.h"
-#include "Subnet.h"
+#include "CIDR_Network.h"
 #include "Interval.h"
 #include <cfeyer/ip_coalesce/Coalescing_IP_Range_Set.h>
 

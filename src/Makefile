@@ -22,14 +22,14 @@
 
 LIB_CC_FILES = \
    IP_Range.cpp \
-   Subnet.cpp \
+   CIDR_Network.cpp \
    Format.cpp \
    Interval.cpp \
    Coalescing_IP_Range_Set.cpp
 
 LIB_H_FILES = \
    ../include/cfeyer/ip_coalesce/IP_Range.h \
-   Subnet.h \
+   CIDR_Network.h \
    Format.h \
    Interval.h \
    ../include/cfeyer/ip_coalesce/Coalescing_IP_Range_Set.h

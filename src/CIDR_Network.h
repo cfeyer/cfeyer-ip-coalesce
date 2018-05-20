@@ -20,8 +20,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#ifndef SUBNET_H
-#define SUBNET_H
+#ifndef CIDR_NETWORK_H
+#define CIDR_NETWORK_H
 
 #include <cstdint>
 
@@ -47,4 +47,4 @@ uint32_t size_to_subnet_mask( uint64_t size );
 } // namespace ip_coalesce
 } // namespace cfeyer
 
-#endif /* SUBNET_H */
+#endif /* CIDR_NETWORK_H */
