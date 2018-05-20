@@ -81,4 +81,4 @@ test : IP_Range_Tests.o gtest_main.a
 .PHONY : check
 
 check : test
-	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(PWD)/../lib ./test
+	LD_LIBRARY_PATH=$(PWD)/../lib:$(LD_LIBRARY_PATH) ./test

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IP_COALESCE="./ip-coalesce"
+IP_COALESCE="ip-coalesce"
 
 FIELD_DELIM=":"
 IP_RANGE_DELIM=","

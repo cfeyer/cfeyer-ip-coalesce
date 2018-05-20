@@ -20,13 +20,45 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #  THE SOFTWARE.
 
-.PHONY: clean 
+INSTALL_BIN_DIR=/usr/bin
+INSTALL_LIB_DIR=/usr/lib
 
-all:
+.PHONY: src test check clean install unininstall
+
+all: check
+
+src:
 	make -C src
+
+test: src
 	make -C test
+
+check: test
 	cd test; make check
 
 clean:
 	make -C src clean
 	make -C test clean
+
+INSTALL_TARGETS= \
+         $(INSTALL_BIN_DIR)/ip-coalesce \
+         $(INSTALL_BIN_DIR)/ip-coalesce-table \
+         $(INSTALL_BIN_DIR)/ip-coalesce-table.sh \
+         $(INSTALL_LIB_DIR)/libcfeyer_ip_coalesce.so
+
+install: src $(INSTALL_TARGETS)
+
+uninstall:
+	rm -rf $(INSTALL_TARGETS)
+
+$(INSTALL_BIN_DIR)/ip-coalesce:
+	install --mode=755 ./bin/ip-coalesce $@
+
+$(INSTALL_BIN_DIR)/ip-coalesce-table:
+	install --mode=755 ./bin/ip-coalesce-table $@
+
+$(INSTALL_BIN_DIR)/ip-coalesce-table.sh:
+	install --mode=755 ./bin/ip-coalesce-table.sh $@
+
+$(INSTALL_LIB_DIR)/libcfeyer_ip_coalesce.so:
+	install --mode=644 ./lib/libcfeyer_ip_coalesce.so $@
