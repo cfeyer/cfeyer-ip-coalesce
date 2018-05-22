@@ -97,7 +97,7 @@ bool IP_Range:: from_four_octet_address_slash_four_octet_netmask_string( const s
    bool success = false;
 
    std::smatch matches;
-   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
+   static const std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
 
    if( std::regex_match( str, matches, regex ) )
    {
@@ -125,7 +125,7 @@ bool IP_Range:: from_four_octet_address_slash_netmask_length_string( const std::
    bool success = false;
 
    std::smatch matches;
-   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)" );
+   static const std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)" );
 
    if( std::regex_match( str, matches, regex ) )
    {
@@ -155,7 +155,7 @@ bool IP_Range:: from_four_octet_address_no_netmask_string( const std::string & s
    bool success = false;
 
    std::smatch matches;
-   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
+   static const std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
 
    if( std::regex_match( str, matches, regex ) )
    {
