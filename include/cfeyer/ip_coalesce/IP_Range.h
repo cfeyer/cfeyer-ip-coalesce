@@ -41,6 +41,10 @@ class IP_Range
       uint32_t get_end_address() const;
 
       void from_string( const std::string & str );
+      bool from_four_octet_address_slash_four_octet_netmask_string( const std::string & str );
+      bool from_four_octet_address_slash_netmask_length_string( const std::string & str );
+      bool from_four_octet_address_no_netmask_string( const std::string & str );
+
       std::string to_string() const;
 
       bool is_coalescable( const IP_Range & other ) const;

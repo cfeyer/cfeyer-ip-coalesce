@@ -78,19 +78,28 @@ uint32_t IP_Range::get_end_address() const
 
 void IP_Range::from_string( const std::string & str )
 {
+   bool success =
+      from_four_octet_address_slash_four_octet_netmask_string( str ) ||
+      from_four_octet_address_slash_netmask_length_string( str ) ||
+      from_four_octet_address_no_netmask_string( str );
+
+   if( !success )
+   {
+      std::ostringstream msg;
+      msg << "Failed to parse '" << str << "'.";
+      throw std::runtime_error( msg.str() );
+   }
+}
+
+
+bool IP_Range:: from_four_octet_address_slash_four_octet_netmask_string( const std::string & str )
+{
+   bool success = false;
+
    std::smatch matches;
+   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
 
-   std::regex four_dotted_octets_slash_four_dotted_octets_regex(
-      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
-
-   std::regex four_dotted_octets_slash_netmask_length_regex(
-      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)" );
-
-   std::regex four_dotted_octets_regex(
-      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
-
-
-   if( std::regex_match( str, matches, four_dotted_octets_slash_four_dotted_octets_regex ) )
+   if( std::regex_match( str, matches, regex ) )
    {
       std::vector<std::uint8_t> octets(8);
 
@@ -103,8 +112,22 @@ void IP_Range::from_string( const std::string & str )
 
       *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
                         from_octets(octets.at(4), octets.at(5), octets.at(6), octets.at(7) ) );
+
+      success = true;
    }
-   else if( std::regex_match( str, matches, four_dotted_octets_slash_netmask_length_regex ) )
+
+   return success;
+}
+
+
+bool IP_Range:: from_four_octet_address_slash_netmask_length_string( const std::string & str )
+{
+   bool success = false;
+
+   std::smatch matches;
+   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)" );
+
+   if( std::regex_match( str, matches, regex ) )
    {
       std::vector<std::uint8_t> octets(4);
 
@@ -119,8 +142,22 @@ void IP_Range::from_string( const std::string & str )
 
       *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
                         size_to_subnet_mask( netmask_length_to_address_count( netmask_length ) ) );
+
+      success = true;
    }
-   else if( std::regex_match( str, matches, four_dotted_octets_regex ) )
+
+   return success;
+}
+
+
+bool IP_Range:: from_four_octet_address_no_netmask_string( const std::string & str )
+{
+   bool success = false;
+
+   std::smatch matches;
+   std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
+
+   if( std::regex_match( str, matches, regex ) )
    {
       std::vector<std::uint8_t> octets(4);
 
@@ -133,13 +170,10 @@ void IP_Range::from_string( const std::string & str )
 
       *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
                         0xffffffff );
+
+       success = true;
    }
-   else
-   {
-      std::ostringstream msg;
-      msg << "Failed to parse '" << str << "'.";
-      throw std::runtime_error( msg.str() );
-   }
+   return success;
 }
 
 
