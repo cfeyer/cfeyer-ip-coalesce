@@ -44,6 +44,7 @@ class IP_Range
       bool from_four_octet_address_slash_four_octet_netmask_string( const std::string & str );
       bool from_four_octet_address_slash_netmask_length_string( const std::string & str );
       bool from_four_octet_address_no_netmask_string( const std::string & str );
+      bool from_four_octet_address_dash_four_octet_address_string( const std::string & str );
 
       std::string to_string() const;
 

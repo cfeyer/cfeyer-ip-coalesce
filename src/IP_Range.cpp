@@ -81,6 +81,7 @@ void IP_Range::from_string( const std::string & str )
    bool success =
       from_four_octet_address_slash_four_octet_netmask_string( str ) ||
       from_four_octet_address_slash_netmask_length_string( str ) ||
+      from_four_octet_address_dash_four_octet_address_string( str ) ||
       from_four_octet_address_no_netmask_string( str );
 
    if( !success )
@@ -173,6 +174,36 @@ bool IP_Range:: from_four_octet_address_no_netmask_string( const std::string & s
 
        success = true;
    }
+
+   return success;
+}
+
+
+bool IP_Range:: from_four_octet_address_dash_four_octet_address_string( const std::string & str )
+{
+   bool success = false;
+
+   std::smatch matches;
+   static const std::regex regex( "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)-([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
+
+   if( std::regex_match( str, matches, regex ) )
+   {
+      std::vector<std::uint8_t> octets(8);
+
+      for( int i = 1; i < matches.size(); i++ )
+      {
+         const std::string & octet_str = matches[i];
+         uint8_t octet = std::stoi( octet_str );
+         octets.at(i-1) = octet;
+      }
+
+      *this = IP_Range();
+      m_start_address = from_octets( octets.at(0), octets.at(1), octets.at(2), octets.at(3) );
+      m_end_address = from_octets( octets.at(4), octets.at(5), octets.at(6), octets.at(7) );
+
+      success = true;
+   }
+
    return success;
 }
 

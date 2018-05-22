@@ -499,6 +499,12 @@ TEST(IP_Range, test_from_string_192_168_1_2) {
    EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,255)) == range );
 }
 
+TEST(IP_Range, test_from_string_192_168_0_0_dash_192_168_1_255) {
+   IP_Range range;
+   range.from_string( "192.168.0.0-192.168.1.255" );
+   EXPECT_TRUE( IP_Range(from_octets(192,168,0,0), from_octets(255,255,254,0)) == range );
+}
+
 TEST(IP_Range, test_stream_input_0_0_0_0_slash_255_255_255_255) {
    std::istringstream strm( "0.0.0.0/255.255.255.255" );
    IP_Range range;
