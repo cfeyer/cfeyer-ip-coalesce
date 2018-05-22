@@ -26,6 +26,9 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include <regex>
+#include <string>
+#include <iostream> //TODO debug
 
 #include "Format.h"
 #include "CIDR_Network.h"
@@ -75,29 +78,61 @@ uint32_t IP_Range::get_end_address() const
 
 void IP_Range::from_string( const std::string & str )
 {
-   std::istringstream istrm( str );
+   std::smatch matches;
 
-   std::vector<std::string> substrings(8);
+   std::regex four_dotted_octets_slash_four_dotted_octets_regex(
+      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
 
-   if(
-      std::getline( istrm, substrings[0], '.' ) &&
-      std::getline( istrm, substrings[1], '.' ) &&
-      std::getline( istrm, substrings[2], '.' ) &&
-      std::getline( istrm, substrings[3], '/' ) &&
-      std::getline( istrm, substrings[4], '.' ) &&
-      std::getline( istrm, substrings[5], '.' ) &&
-      std::getline( istrm, substrings[6], '.' ) &&
-      istrm >> substrings[7]
-   )
+   std::regex four_dotted_octets_slash_netmask_length_regex(
+      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)/([0-9]+)" );
+
+   std::regex four_dotted_octets_regex(
+      "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" );
+
+
+   if( std::regex_match( str, matches, four_dotted_octets_slash_four_dotted_octets_regex ) )
    {
-      std::vector<uint8_t> octets(8);
-      for( int i = 0; i < 8; i++ )
+      std::vector<std::uint8_t> octets(8);
+
+      for( int i = 1; i < matches.size(); i++ )
       {
-         octets[i] = std::stoi( substrings[i] );
+         const std::string & octet_str = matches[i];
+         uint8_t octet = std::stoi( octet_str );
+         octets.at(i-1) = octet;
       }
 
-      *this = IP_Range( from_octets(octets[0], octets[1], octets[2], octets[3]),
-                        from_octets(octets[4], octets[5], octets[6], octets[7]) );
+      *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
+                        from_octets(octets.at(4), octets.at(5), octets.at(6), octets.at(7) ) );
+   }
+   else if( std::regex_match( str, matches, four_dotted_octets_slash_netmask_length_regex ) )
+   {
+      std::vector<std::uint8_t> octets(4);
+
+      for( int i = 1; i < (matches.size()-1); i++ )
+      {
+         const std::string & octet_str = matches[i];
+         uint8_t octet = std::stoi( octet_str );
+         octets.at(i-1) = octet;
+      }
+
+      int netmask_length = std::stoi( matches[matches.size()-1] );
+
+      *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
+                        size_to_subnet_mask( netmask_length_to_address_count( netmask_length ) ) );
+   }
+   else if( std::regex_match( str, matches, four_dotted_octets_regex ) )
+   {
+      std::vector<std::uint8_t> octets(4);
+
+      for( int i = 1; i < matches.size(); i++ )
+      {
+         const std::string & octet_str = matches[i];
+         uint8_t octet = std::stoi( octet_str );
+         octets.at(i-1) = octet;
+      }
+
+      *this = IP_Range( from_octets(octets.at(0), octets.at(1), octets.at(2), octets.at(3) ),
+                        0xffffffff );
    }
    else
    {

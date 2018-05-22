@@ -493,6 +493,12 @@ TEST(IP_Range, test_from_string_192_168_1_2_slash_255_255_255_0) {
    EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
 }
 
+TEST(IP_Range, test_from_string_192_168_1_2) {
+   IP_Range range;
+   range.from_string( "192.168.1.2" );
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,255)) == range );
+}
+
 TEST(IP_Range, test_stream_input_0_0_0_0_slash_255_255_255_255) {
    std::istringstream strm( "0.0.0.0/255.255.255.255" );
    IP_Range range;
@@ -521,19 +527,19 @@ TEST(IP_Range, test_stream_input_192_168_1_2_slash_255_255_255_0) {
    EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,0)) == range );
 }
 
-//TEST(IP_Range, test_stream_input_192_168_1_2_slash_0) {
-//   std::istringstream strm( "192.168.1.2/0" );
-//   IP_Range range;
-//   strm >> range;
-//   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(0,0,0,0)) == range );
-//}
-//
-//TEST(IP_Range, test_stream_input_192_168_1_2_slash_32) {
-//   std::istringstream strm( "192.168.1.2/32" );
-//   IP_Range range;
-//   strm >> range;
-//   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,255)) == range );
-//}
+TEST(IP_Range, test_stream_input_192_168_1_2_slash_0) {
+   std::istringstream strm( "192.168.1.2/0" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(0,0,0,0)) == range );
+}
+
+TEST(IP_Range, test_stream_input_192_168_1_2_slash_32) {
+   std::istringstream strm( "192.168.1.2/32" );
+   IP_Range range;
+   strm >> range;
+   EXPECT_TRUE( IP_Range(from_octets(192,168,1,2), from_octets(255,255,255,255)) == range );
+}
 
 TEST(IP_Range, test_stream_input_from_empty_stream) {
    std::istringstream strm( "192.168.1.2/255.255.255.0" );
