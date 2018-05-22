@@ -40,6 +40,7 @@ class IP_Range
       uint32_t get_start_address() const;
       uint32_t get_end_address() const;
 
+      void from_string( const std::string & str );
       std::string to_string() const;
 
       bool is_coalescable( const IP_Range & other ) const;

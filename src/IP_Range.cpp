@@ -73,6 +73,41 @@ uint32_t IP_Range::get_end_address() const
 }
 
 
+void IP_Range::from_string( const std::string & str )
+{
+   std::istringstream istrm( str );
+
+   std::vector<std::string> substrings(8);
+
+   if(
+      std::getline( istrm, substrings[0], '.' ) &&
+      std::getline( istrm, substrings[1], '.' ) &&
+      std::getline( istrm, substrings[2], '.' ) &&
+      std::getline( istrm, substrings[3], '/' ) &&
+      std::getline( istrm, substrings[4], '.' ) &&
+      std::getline( istrm, substrings[5], '.' ) &&
+      std::getline( istrm, substrings[6], '.' ) &&
+      istrm >> substrings[7]
+   )
+   {
+      std::vector<uint8_t> octets(8);
+      for( int i = 0; i < 8; i++ )
+      {
+         octets[i] = std::stoi( substrings[i] );
+      }
+
+      *this = IP_Range( from_octets(octets[0], octets[1], octets[2], octets[3]),
+                        from_octets(octets[4], octets[5], octets[6], octets[7]) );
+   }
+   else
+   {
+      std::ostringstream msg;
+      msg << "Failed to parse '" << str << "'.";
+      throw std::runtime_error( msg.str() );
+   }
+}
+
+
 std::string IP_Range::to_string() const
 {
    std::string str;
@@ -212,27 +247,12 @@ IP_Range & IP_Range::operator += ( const IP_Range & other )
 
 std::istream & operator >> ( std::istream & istrm, IP_Range & range )
 {
-   std::vector<std::string> substrings(8);
+   std::string str;
+   istrm >> str;
 
-   if(
-      std::getline( istrm, substrings[0], '.' ) &&
-      std::getline( istrm, substrings[1], '.' ) &&
-      std::getline( istrm, substrings[2], '.' ) &&
-      std::getline( istrm, substrings[3], '/' ) &&
-      std::getline( istrm, substrings[4], '.' ) &&
-      std::getline( istrm, substrings[5], '.' ) &&
-      std::getline( istrm, substrings[6], '.' ) &&
-      istrm >> substrings[7]
-   )
+   if( !str.empty() )
    {
-      std::vector<uint8_t> octets(8);
-      for( int i = 0; i < 8; i++ )
-      {
-         octets[i] = std::stoi( substrings[i] );
-      }
-
-      range = IP_Range( from_octets(octets[0], octets[1], octets[2], octets[3]),
-                        from_octets(octets[4], octets[5], octets[6], octets[7]) );
+      range.from_string( str );
    }
 
    return istrm;
