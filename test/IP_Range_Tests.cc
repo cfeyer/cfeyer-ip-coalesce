@@ -303,6 +303,14 @@ TEST(IP_Range, test_range_of_size_one_is_not_coalescable_with_a_far_above_range_
    EXPECT_FALSE( IP_Range(0xfffffffd,0xffffffff).is_coalescable( IP_Range(0xffffffff, 0xffffffff) ) );
 }
 
+TEST(IP_Range, test_range_at_beginning_of_address_space_does_not_coalesce_with_range_at_end_of_address_space ) {
+   EXPECT_FALSE( IP_Range(from_octets(255,255,255,255), from_octets(255,255,255,255)).is_coalescable(
+                 IP_Range(from_octets(0,0,0,0), from_octets(255,255,255,255))) );
+
+   EXPECT_FALSE( IP_Range(from_octets(0,0,0,0), from_octets(255,255,255,255)).is_coalescable(
+                 IP_Range(from_octets(255,255,255,255), from_octets(255,255,255,255))) );
+}
+
 TEST(IP_Range, test_range_with_discontiguous_subnet_mask_is_not_coalescable_with_itself )
 {
    EXPECT_FALSE( IP_Range(0, 0xffffff0f).is_coalescable( IP_Range(0, 0xffffff0f) ) );
